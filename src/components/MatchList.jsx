@@ -1,6 +1,6 @@
 // src/components/MatchList.jsx
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase } from '../supabaseClient.js';
 
 export default function MatchList() {
   const [matches, setMatches] = useState([]);
@@ -64,7 +64,6 @@ export default function MatchList() {
     }
   };
 
-  // NEW: Function to delete a match from history
   const handleDeleteMatch = async (matchId) => {
     if (window.confirm('Are you sure you want to permanently delete this match from history?')) {
         const { error } = await supabase
@@ -76,11 +75,10 @@ export default function MatchList() {
             alert('Error deleting match: ' + error.message);
         } else {
             alert('Match deleted successfully.');
-            fetchMatches(); // Refresh the list
+            fetchMatches();
         }
     }
   };
-
 
   if (loading) return <p>Loading matches...</p>;
   if (error) return <p>Error loading matches: {error}</p>;
@@ -90,16 +88,17 @@ export default function MatchList() {
 
   return (
     <div className="match-list">
-      <h3 style={{ marginTop: '40px' }}>Active Matches</h3>
+      <h3>Active Matches</h3>
       {activeMatches.length === 0 ? (
-        <p>Match dropping soon, please check back later.</p>
+        <p>No active matches.</p>
       ) : (
         <table>
           <thead>
             <tr>
               <th>Match</th>
               <th>Prediction</th>
-              <th>Result</th>
+              <th>Odds</th>
+              <th>Result Input</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -109,11 +108,11 @@ export default function MatchList() {
               <tr key={match.id}>
                 <td>{match.home_team} vs {match.away_team}</td>
                 <td>{match.prediction_text}</td>
+                <td>{match.odds}</td>
                 <td>
                   <input
                     type="text"
                     placeholder="e.g., 2-1"
-                    className="result-input"
                     onChange={(e) => handleResultChange(match.id, e.target.value)}
                   />
                 </td>
@@ -140,28 +139,29 @@ export default function MatchList() {
         <table>
           <thead>
             <tr>
-              <th>Date</th> {/* NEW */}
+              <th>Date</th>
               <th>Match</th>
               <th>Prediction</th>
+              <th>Odds</th> {/* <<< THIS COLUMN IS NEW */}
               <th>Final Result</th>
               <th>Status</th>
-              <th>Action</th> {/* NEW */}
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {matchHistory.map(match => (
               <tr key={match.id}>
-                <td>{new Date(match.kickoff_time).toLocaleDateString()}</td> {/* NEW */}
+                <td>{new Date(match.kickoff_time).toLocaleDateString()}</td>
                 <td>{match.home_team} vs {match.away_team}</td>
                 <td>{match.prediction_text}</td>
+                <td>{match.odds}</td> {/* <<< THIS DATA IS NEW */}
                 <td><strong>{match.result}</strong></td>
                 <td>
-                  <span className={match.status === 'Won' ? 'status-won' : 'status-lost'}>
+                  <span style={{color: match.status === 'Won' ? '#48bb78' : '#e53e3e', fontWeight: 'bold'}}>
                     {match.status}
                   </span>
                 </td>
                 <td>
-                  {/* NEW: Delete button */}
                   <button onClick={() => handleDeleteMatch(match.id)} className="button-danger">
                     Delete
                   </button>
