@@ -1,13 +1,26 @@
 // src/App.jsx
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AdminLayout from './components/AdminLayout.jsx';
+import DashboardPage from './components/DashboardPage.jsx';
+import UserManagement from './components/UserManagement.jsx';
+import MatchesPage from './components/MatchesPage.jsx';
+import PredictionReview from './components/PredictionReview.jsx';
+import AdMobManager from './components/AdMobManager.jsx';
 import './App.css';
-import Dashboard from './components/Dashboard';
 
-function App() {
+export default function App() {
   return (
-    <div className="container" style={{ padding: '50px 0 100px 0' }}>
-      <Dashboard />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AdminLayout />}>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/users" element={<UserManagement />} />
+          <Route path="/matches" element={<MatchesPage />} />
+          <Route path="/user-predictions" element={<PredictionReview />} />
+          <Route path="/settings" element={<AdMobManager />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
