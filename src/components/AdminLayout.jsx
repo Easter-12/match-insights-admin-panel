@@ -9,12 +9,13 @@ export default function AdminLayout() {
         <h1 className="sidebar-header">Match Insights</h1>
         <NavLink to="/" className="nav-link">Dashboard</NavLink>
         <NavLink to="/users" className="nav-link">User Management</NavLink>
-        <NavLink to="/matches" className="nav-link">Match Management</NavLink>
+        <NavLink to="/matches" className="nav-link">Free Matches</NavLink>
+        <NavLink to="/vip-matches" className="nav-link">VIP Management</NavLink> {/* NEW LINK */}
         <NavLink to="/user-predictions" className="nav-link">Prediction Review</NavLink>
         <NavLink to="/settings" className="nav-link">Settings</NavLink>
       </nav>
       <main className="main-content">
-        <Outlet /> {/* This is where the page content will be rendered */}
+        <Outlet />
       </main>
     </div>
   );
